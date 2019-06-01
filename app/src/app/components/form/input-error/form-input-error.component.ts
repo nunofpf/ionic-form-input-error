@@ -9,35 +9,25 @@ import { FormGroup } from '@angular/forms';
 export class FormInputErrorComponent {
     @Input() form: FormGroup;
     @Input() formInput: string;
-    formInputError: string;
 
-    constructor() {
-
-    }
-
-    formInputHasErrors() {
+    get formInputError() {
         if (this.form.controls[this.formInput]) {
             const errors = this.form.controls[this.formInput].errors;
             for (const errorName in errors) {
                 if (errors[errorName]) {
                     switch (errorName) {
                         case 'required':
-                            return false;
+                            return null;
                         case 'minlength':
-                            this.formInputError =
-                                `Must be at least ${this.form.controls[this.formInput].errors.minlength.requiredLength} characters long.`;
-                            return true;
+                            return `Must be at least ${this.form.controls[this.formInput].errors.minlength.requiredLength} characters long.`;
                         case 'email':
-                            this.formInputError = 'Please enter an email address';
-                            return true;
+                            return 'Please enter an email address';
                         default:
-                            this.formInputError = this.form.controls[this.formInput].errors[errorName];
-                            return true;
+                            return this.form.controls[this.formInput].errors[errorName];
                     }
                 }
             }
-            this.formInputError = '';
-            return false;
+            return null;
         }
     }
 }
